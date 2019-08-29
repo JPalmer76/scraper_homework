@@ -5,8 +5,8 @@ var path = require("path");
 var request = require("request");
 var cheerio = require("cheerio");
 
-var Comment = require("../models/comment.js");
-var Article = require("../models/articles.js");
+var Comment = require("../models/comment");
+var Article = require("../models/articles");
 
 router.get("/", function(req, res) {
     res.redirect("/articles");
@@ -18,7 +18,7 @@ router.get("/scrape", function(req, res){
         var titlesArray = [];
 
         $(".c-entry-box--compact__title").each(function(i, ele) {
-            var resut = {};
+            var result = {};
 
             result.title = $(this)
             .children("a")
@@ -46,7 +46,7 @@ router.get("/scrape", function(req, res){
                     console.log("Article already exists.");
                 }
             } else {
-                console.log("not saved to DB, missing data")
+                console.log("not saved to DB, missing data");
             }
         });
         res.redirect("/");
@@ -101,9 +101,9 @@ router.get("/clearAll", function(req, res) {
               hasObj.article = doc;
               var link = doc.link;
               request(link, function(error, response, html) {
-                  var $ = cheerio.load(htmml);
+                  var $ = cheerio.load(html);
 
-                  $(".l-col__main").each(function(i. elem) {
+                  $(".l-col__main").each(function(i, elem) {
                       hasObj.body = $(this).children(".c-entry-content").children("p").text();
 
                       res.render("article", hasObj);
@@ -116,7 +116,7 @@ router.get("/clearAll", function(req, res) {
 
   router.post("/comment/:id", function(req, res) {
       var user = req.body.name;
-      var cantent = req.body.comment;
+      var content = req.body.comment;
       var articleId = req.params.id;
 
       var commentObj = {
